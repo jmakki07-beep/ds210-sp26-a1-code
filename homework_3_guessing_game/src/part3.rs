@@ -33,6 +33,55 @@ impl PlayerTrait for SimulatedPlayer {
 
 
 
+#[cfg(test)]
+mod part1_tests {
+    use crate::part1::Part1;
+    use crate::part3::SimulatedPlayer;
+    use crate::player::Player;
+    use crate::strategies::Strategy;
+
+    #[test]
+    fn the_min() {
+        let min = 0;
+        let max = 100;
+        let number = min;
+
+        // We create a simulated player
+        let mut player = Player::new(SimulatedPlayer::new(number));
+        let answer = Part1::guess_the_number(&mut player, min, max);
+        assert_eq!(answer, number);
+        assert_eq!(player.steps(), 1);
+    }
+
+    #[test]
+    fn the_max() {
+        let min = 0;
+        let max = 100;
+        let number = max - 1;
+
+        // We create a simulated player
+        let mut player = Player::new(SimulatedPlayer::new(number));
+        let answer = Part1::guess_the_number(&mut player, min, max);
+        assert_eq!(answer, number);
+        assert!(player.steps() <= max);
+    }
+
+    #[test]
+    fn a_different_number() {
+        let min = 0;
+        let max = 100;
+        let number = 50;
+
+        // We create a simulated player
+        let mut player = Player::new(SimulatedPlayer::new(number));
+        let answer = Part1::guess_the_number(&mut player, min, max);
+        assert_eq!(answer, number);
+        assert!(player.steps() <= max);
+    }
+}
+
+
+
 
 #[cfg(test)]
 mod bad_strategy_tests {
@@ -79,65 +128,20 @@ mod bad_strategy_tests {
 
 
 #[cfg(test)]
-mod part1_tests {
-    use crate::part1::Part1;
-    use crate::part3::SimulatedPlayer;
-    use crate::player::Player;
-    use crate::strategies::Strategy;
-
-    #[test]
-    fn the_min() {
-        let min = 0;
-        let max = 100;
-        let number = min;
-
-        // We create a simulated player
-        let mut player = Player::new(SimulatedPlayer::new(number));
-        let answer = Part1::guess_the_number(&mut player, min, max);
-        assert_eq!(answer, number);
-        assert_eq!(player.steps(), 1);
-    }
-
-    #[test]
-    fn the_max() {
-        let min = 0;
-        let max = 100;
-        let number = max;
-
-        // We create a simulated player
-        let mut player = Player::new(SimulatedPlayer::new(number));
-        let answer = Part1::guess_the_number(&mut player, min, max);
-        assert_eq!(answer, number);
-        assert!(player.steps() <= max);
-    }
-
-    #[test]
-    fn a_different_number() {
-        let min = 0;
-        let max = 100;
-        let number = todo!("Provide a different number to test part1");
-
-        // We create a simulated player
-        let mut player = Player::new(SimulatedPlayer::new(number));
-        let answer = Part1::guess_the_number(&mut player, min, max);
-        assert_eq!(answer, number);
-        assert!(player.steps() <= max);
-    }
-}
-
-#[cfg(test)]
 mod part2_tests {
     use crate::part2::Part2;
     use crate::part3::SimulatedPlayer;
     use crate::player::Player;
     use crate::strategies::Strategy;
 
+    // Add tests for part2 similar to part1 above
+    // Note that your tests should test part2, not part1
+    // They should use the line below:
+    // `let answer = Part2::guess_the_number(&mut player, min, max);`
+    // Make sure to test that the number of steps that part2 takes is "small"
+    // Look at part1_tests for inspiration.
     #[test]
     fn the_min() {
-        // Add tests for part2 similar to part1 above
-        // Note that your tests should test part2, not part1
-        // They should use the line below:
-        //   let answer = Part2::guess_the_number(&mut player, min, max);
         todo!("add your tests for part2");
     }
 

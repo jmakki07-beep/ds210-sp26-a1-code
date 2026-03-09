@@ -61,17 +61,44 @@ impl<T> FastVec<T> {
     // Student 1 and Student 2 should implement this together
     // Use the project handout as a guide for this part!
     pub fn get(&self, i: usize) -> &T {
-        todo!("implement get!");
+    if i >= self.len {
+        panic!("FastVec: get out of bounds");
     }
+
+    unsafe {
+        let ptr = self.ptr_to_data.add(i);
+        &*ptr
+    }
+}
+    
 
     // Student 2 should implement this.
     pub fn push(&mut self, t: T) {
-        if self.len == self.capacity {
-            todo!("implement growing the vector by doubling the size!");
+        if self.len == self.capacity { 
+            unsafe{
+                let new_capacity = self.capacity *2 ;
+                let new_ptr = MALLOC.malloc(size_of::<T>() * new_capacity) as *mut T;
+                for i in 0..self.len{
+                    let value = ptr::read(self.ptr_to_data.add(i));
+                    ptr::write(new_ptr.add(i), value);
+                }
+                MALLOC.free(self.ptr_to_data as *mut u8);
+                self.ptr_to_data = new_ptr;
+                self.capacity = new_capacity;
+                 ptr::write(self.ptr_to_data.add(self.len), t);
+                  self.len += 1;
+            }
+
+    
         } else {
-            todo!("implement pushing t directly since the vector still has capacity!");
-        }
+    unsafe {
+        let ptr = self.ptr_to_data.add(self.len);
+        ptr::write(ptr, t);
     }
+    self.len += 1;
+}
+        }
+    
 
     // Student 1 should implement this.
     pub fn remove(&mut self, i: usize) {
@@ -83,6 +110,12 @@ impl<T> FastVec<T> {
     // Hint: check out case 2 in memory.rs, which you can run using
     //       cargo run --bin memory
     pub fn clear(&mut self) {
+        for i in 0..self.len{
+             unsafe {
+        let _ = ptr::read(self.ptr_to_data.add(i));
+    }
+        }
+
         MALLOC.free(self.ptr_to_data as *mut u8);
         self.ptr_to_data = null_mut();
         self.len = 0;

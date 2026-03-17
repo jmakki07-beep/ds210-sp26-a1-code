@@ -1,21 +1,17 @@
 use kalosm::language::*;
-
+use std::collections::HashMap;
 #[allow(dead_code)]
 pub struct ChatbotV3 {
-    // What should you store inside your Chatbot type?
-    // The model? The chat_session?
-    // Storing a single chat session is not enough: it mixes messages from different users
-    // together!
-    // Need to store one chat session per user.
-    // Think of some kind of data structure that can help you with this.
+    model: Llama,
+    sessions: HashMap<String, Chat<Llama>>,
 }
-
 impl ChatbotV3 {
     #[allow(dead_code)]
     pub fn new(model: Llama) -> ChatbotV3 {
         return ChatbotV3 {
-            // Make sure you initialize your struct members here
-        };
+    model,
+    sessions: HashMap::new(),
+};
     }
 
     #[allow(dead_code)]
@@ -28,11 +24,19 @@ impl ChatbotV3 {
     }
 
     #[allow(dead_code)]
-    pub fn get_history(&self, username: String) -> Vec<String> {
-        // Extract the chat message history for the given username
-        // Hint: think of how you can retrieve the Chat object for that user, when you retrieve it
-        // you may want to use https://docs.rs/kalosm/0.4.0/kalosm/language/struct.Chat.html#method.session
-        // to then retrieve the history!
-        return Vec::new();
+pub fn get_history(&self, username: String) -> Vec<String> {
+    if let Some(chat) = self.sessions.get(&username) {
+        let history = chat.session().unwrap().history();
+
+        let mut result = Vec::new();
+
+        for msg in history {
+            result.push(msg.content().to_string());
+        }
+
+        return result;
     }
+
+    Vec::new()
+}
 }

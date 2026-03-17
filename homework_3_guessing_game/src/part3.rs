@@ -17,8 +17,9 @@ impl PlayerTrait for SimulatedPlayer {
      * The function should return false otherwise.
      */
     fn ask_if_equal(&mut self, guess: u32) -> bool {
-        self.the_number == guess
-    }
+    self.the_number == guess
+         }
+
     /**
      * This function compares the guess to the number that the player has in mind.
      * The function should return one of these three cases:
@@ -27,14 +28,15 @@ impl PlayerTrait for SimulatedPlayer {
      * 1 if the number > guess
      */
     fn ask_to_compare(&mut self, guess: u32) -> i32 {
-        if self.the_number == guess {
-            0
-        } else if self.the_number < guess {
-            -1
-        } else {
-            1
-        }
+    if self.the_number == guess {
+        0
+    } else if self.the_number < guess {
+        -1
+    } else {
+        1
     }
+}
+
 }
 
 
@@ -147,43 +149,43 @@ mod part2_tests {
     // `let answer = Part2::guess_the_number(&mut player, min, max);`
     // Make sure to test that the number of steps that part2 takes is "small"
     // Look at part1_tests for inspiration.
-    #[test]
-    fn the_min() {
-        let min = 0;
-        let max = 100;
-        let number = min;
+#[test]
+fn the_min() {
+    let min = 0;
+    let max = 100;
+    let number = min;
 
-        let mut player = Player::new(SimulatedPlayer::new(number));
-        let answer = Part2::guess_the_number(&mut player, min, max);
+    let mut player = Player::new(SimulatedPlayer::new(number));
+    let answer = Part2::guess_the_number(&mut player, min, max);
 
-        assert_eq!(answer, number);
-        assert!(player.steps() <= 20);
-    }
+    assert_eq!(answer, number);
+    assert!(player.steps() <= 10);
+}
 
-    #[test]
-    fn the_max() {
-        let min = 0;
-        let max = 100;
-        let number = max - 1;
+#[test]
+fn the_max() {
+    let min = 0;
+    let max = 100;
+    let number = max - 1;
 
-        let mut player = Player::new(SimulatedPlayer::new(number));
-        let answer = Part2::guess_the_number(&mut player, min, max);
+    let mut player = Player::new(SimulatedPlayer::new(number));
+    let answer = Part2::guess_the_number(&mut player, min, max);
 
-        assert_eq!(answer, number);
-        assert!(player.steps() <= 20);
-    }
+    assert_eq!(answer, number);
+    assert!(player.steps() <= 10);
+}
 
-    #[test]
-    
-    fn a_different_number() {
-        let min = 0;
-        let max = 100;
-        let number = 50;
+#[test]
+fn a_different_number() {
+    let min = 0;
+    let max = 100;
+    let number = 73;
 
-        let mut player = Player::new(SimulatedPlayer::new(number));
-        let answer = Part2::guess_the_number(&mut player, min, max);
+    let mut player = Player::new(SimulatedPlayer::new(number));
+    let answer = Part2::guess_the_number(&mut player, min, max);
 
-        assert_eq!(answer, number);
-        assert!(player.steps() <= 20);
-    }
+    assert_eq!(answer, number);
+    assert!(player.steps() <= 10);
+}
+
 }

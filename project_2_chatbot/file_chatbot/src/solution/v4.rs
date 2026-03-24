@@ -23,8 +23,19 @@ impl ChatbotV4 {
         // You need to load the chat session from the file using file_library::load_chat_session_from_file(...).
         // Think about what needs to happen if the function returns None vs Some(session).
         // Hint: look at https://docs.rs/kalosm/latest/kalosm/language/struct.Chat.html#method.with_session
+        match file_library::load_chat_session_from_file(filename) {
+            None => {}
+            Some(session) => {
+                chat_session = chat_session.with_session(session);
+            }
+        }
 
-        return String::from("Hello, I am not a bot (yet)!");
+        let response = chat_session.add_message(message).await.unwrap();
+
+        let session = chat_session.session().unwrap();
+        file_library::save_chat_session_to_file(filename, &session);
+
+        return response;
     }
 
     pub fn get_history(&self, username: String) -> Vec<String> {

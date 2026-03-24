@@ -18,11 +18,6 @@ impl ChatbotV4 {
         let mut chat_session: Chat<Llama> = self.model
             .chat()
             .with_system_prompt("The assistant will act like a pirate");
-
-        // TODO: You have to implement the rest:
-        // You need to load the chat session from the file using file_library::load_chat_session_from_file(...).
-        // Think about what needs to happen if the function returns None vs Some(session).
-        // Hint: look at https://docs.rs/kalosm/latest/kalosm/language/struct.Chat.html#method.with_session
         match file_library::load_chat_session_from_file(filename) {
             None => {}
             Some(session) => {
@@ -48,11 +43,14 @@ impl ChatbotV4 {
             Some(session) => {
                 let history = session.history();
                 let mut result = Vec::new();
-                for msg in history {
-                    result.push(msg.content().to_string());
-                }
+                  for msg in history {
+                    if msg.content() != "The assistant will act like a pirate" {
+                        result.push(msg.content().to_string());
+                    } }
                 return result;
-            }
+            
         }
     }
+}
+    
 }

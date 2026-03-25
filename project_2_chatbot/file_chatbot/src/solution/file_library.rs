@@ -28,6 +28,4 @@ pub fn load_chat_session_from_file(filename: &str) -> Option<LlamaChatSession> {
         }
         Err(_) => None
     }
-     }
-    // also look at LlamaChatSession::from_bytes(...)
-    unimplemented!("Loading chat session from file {filename}");
+}

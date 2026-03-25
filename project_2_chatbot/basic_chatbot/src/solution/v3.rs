@@ -45,9 +45,13 @@ pub fn get_history(&self, username: String) -> Vec<String> {
         let history = chat.session().unwrap().history();
 
         let mut result = Vec::new();
+        let mut i = 0;
 
         for msg in history {
-            result.push(msg.content().to_string());
+            if i > 0 {
+                result.push(msg.content().to_string());
+            }
+            i += 1;
         }
 
         return result;

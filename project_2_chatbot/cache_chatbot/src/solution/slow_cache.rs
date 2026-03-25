@@ -31,15 +31,29 @@ impl<V> Cache<V> {
     }
 
     // Helper functions.
-    fn remove_least_recently_used(&mut self) {
-        // TODO: your code goes here.
-        // println!("Removing least recently used");
+fn remove_least_recently_used(&mut self) {
+    if self.usage_history.len() > 0 {
+        let least_recent = self.usage_history.pop().unwrap();
+        self.hashmap.remove(&least_recent);
     }
-    fn mark_as_most_recently_used(&mut self, username: String) {
-        // TODO: your code goes here.
-        // println!("Marking {username} as most recently used");
+}
+
+fn mark_as_most_recently_used(&mut self, username: String) {
+    let mut index_to_remove = None;
+
+    for i in 0..self.usage_history.len() {
+        if self.usage_history[i] == username {
+            index_to_remove = Some(i);
+            break;
+        }
     }
 
+    if let Some(i) = index_to_remove {
+        self.usage_history.remove(i);
+    }
+
+    self.usage_history.insert(0, username);
+}
     // Reading from the cache:
     // if the username is in the cache, it must be marked as the most recently
     // used.

@@ -23,13 +23,32 @@ impl ChatbotV5 {
         match cached_chat {
             None => {
                 println!("chat_with_user: {username} is not in the cache!");
-                // The cache does not have the chat. What should you do?
-                return String::from("Hello, I am not a bot (yet)!");
+                let mut chat_session = self
+                    .model
+                    .chat()
+                    .with_system_prompt("The assistant will act like a pirate");
+
+                match file_library::load_chat_session_from_file(filename) {
+                    None => {}
+                    Some(session) => {
+                        chat_session = chat_session.with_session(session);
+                    }
+                }
+                let response = chat_session.add_message(message).await.unwrap();
+                let session = chat_session.session().unwrap().try_clone().unwrap();
+                file_library::save_chat_session_to_file(filename, &session);
+                self.cache.insert_chat(username, chat_session);
+                return response;
             }
             Some(chat_session) => {
                 println!("chat_with_user: {username} is in the cache! Nice!");
-                // The cache has this chat. What should you do?
-                return String::from("Hello, I am not a bot (yet)!");
+                let response = chat_session.add_message(message).await.unwrap();
+
+                let session = chat_session.session().unwrap().try_clone().unwrap();
+                file_library::save_chat_session_to_file(filename, &session);
+
+                return response;
+
             }
         }
     }

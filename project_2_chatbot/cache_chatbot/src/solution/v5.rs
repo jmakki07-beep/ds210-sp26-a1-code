@@ -30,7 +30,6 @@ impl ChatbotV5 {
                 println!("chat_with_user: {username} is in the cache! Nice!");
                 // The cache has this chat. What should you do?
                 return String::from("Hello, I am not a bot (yet)!");
-
             }
         }
     }
@@ -42,16 +41,34 @@ impl ChatbotV5 {
         match cached_chat {
             None => {
                 println!("get_history: {username} is not in the cache!");
-                // TODO: The cache does not have the chat. What should you do?
-                // Your code goes here.
-                return Vec::new();
+
+                match file_library::load_chat_session_from_file(filename) {
+                    None => {
+                        return Vec::new();
+                    }
+                    Some(session) => {
+                        let history = session.history();
+                        let mut result = Vec::new();
+
+                        for msg in history {
+                            result.push(msg.content().to_string());
+                        }
+
+                        return result;
+                    }
+                }
             }
             Some(chat_session) => {
                 println!("get_history: {username} is in the cache! Nice!");
-                // TODO: The cache has this chat. What should you do?
-                // Your code goes here.
-                return Vec::new();
 
+                let history = chat_session.session().unwrap().history();
+                let mut result = Vec::new();
+
+                for msg in history {
+                    result.push(msg.content().to_string());
+                }
+
+                return result;
             }
         }
     }

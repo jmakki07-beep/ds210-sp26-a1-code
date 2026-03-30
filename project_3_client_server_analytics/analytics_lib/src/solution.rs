@@ -2,9 +2,39 @@ use std::collections::HashMap;
 use crate::dataset::{ColumnType, Dataset, Value, Row};
 use crate::query::{Aggregation, Condition, Query};
 
-pub fn filter_dataset(dataset: &Dataset, filter: &Condition) -> Dataset {
-    todo!("Implement this!");
+fn row_passes(row: &Row, condition: &Condition, dataset: &Dataset) -> bool {
+    match condition {
+        Condition::Equal(column_name, target_value) => {
+            let index = dataset.column_index(column_name);
+            let value = row.get_value(index);
+            if value == target_value {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        Condition::Not(inner) => {
+            return !row_passes(row, inner, dataset);
+        }
+        Condition::And(left, right) => {
+            return row_passes(row, left, dataset) && row_passes(row, right, dataset);
+        }
+        Condition::Or(left, right) => {
+            return row_passes(row, left, dataset) || row_passes(row, right, dataset);
+        }
+    }
 }
+
+pub fn filter_dataset(dataset: &Dataset, filter: &Condition) -> Dataset {
+    let mut filtered = Dataset::new(dataset.columns().clone());
+    for row in dataset.iter() {
+        if row_passes(row, filter, dataset) {
+            filtered.add_row(row.clone());
+        }
+    }
+    filtered
+}
+
 
 pub fn group_by_dataset(dataset: Dataset, group_by_column: &String) -> HashMap<Value, Dataset> {
     todo!("Implement this!");

@@ -41,8 +41,41 @@ pub fn group_by_dataset(dataset: Dataset, group_by_column: &String) -> HashMap<V
 }
 
 pub fn aggregate_dataset(dataset: HashMap<Value, Dataset>, aggregation: &Aggregation) -> HashMap<Value, Value> {
-    todo!("Implement this!");
+    let mut aggregated = HashMap::new();
+    for (key, group) in dataset {
+        match aggregation {
+            Aggregation::Count(_) => {
+                aggregated.insert(key, Value::Integer(group.len() as i32));
+            }
+            Aggregation::Sum(col_name) => {
+                let index = group.column_index(col_name);
+                let mut sum = 0;
+                for row in group.iter() {
+                    match row.get_value(index) {
+                        Value::Integer(n) => sum += n,
+                        _ => panic!("Sum on non-integer column"),
+                    }
+                }
+                aggregated.insert(key, Value::Integer(sum));
+            }
+            Aggregation::Average(col_name) => {
+                let index = group.column_index(col_name);
+                let mut sum = 0;
+                let mut count = 0;
+                for row in group.iter() {
+                    count += 1;
+                    match row.get_value(index) {
+                        Value::Integer(n) => sum += n,
+                        _ => panic!("Average on non-integer column"),
+                    }
+                }
+                aggregated.insert(key, Value::Integer(sum / count));
+            }
+        }
+    }
+    aggregated
 }
+
 
 pub fn compute_query_on_dataset(dataset: &Dataset, query: &Query) -> Dataset {
     let filtered = filter_dataset(dataset, query.get_filter());

@@ -7,9 +7,21 @@ pub fn filter_dataset(dataset: &Dataset, filter: &Condition) -> Dataset {
 }
 
 pub fn group_by_dataset(dataset: Dataset, group_by_column: &String) -> HashMap<Value, Dataset> {
-    todo!("Implement this!");
-}
+    let group_by_index = dataset.column_index(group_by_column);
+    let columns = dataset.columns().clone();
+    let mut grouped: HashMap<Value, Dataset> = HashMap::new();
 
+    for row in dataset.into_iter() {
+        let group_value = row.get_value(group_by_index).clone();
+
+        grouped
+            .entry(group_value)
+            .or_insert_with(|| Dataset::new(columns.clone()))
+            .add_row(row);
+    }
+
+    grouped
+}
 pub fn aggregate_dataset(dataset: HashMap<Value, Dataset>, aggregation: &Aggregation) -> HashMap<Value, Value> {
     todo!("Implement this!");
 }

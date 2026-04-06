@@ -5,9 +5,9 @@ pub fn hello() -> String {
     return String::from("hello");
 }
 
-pub fn slow_rpc(input_dataset: &Dataset) -> Dataset {
+pub fn slow_rpc(input_dataset: &Dataset) -> Dataset{
     println!("slow_rpc called");
-    todo!("Implement this");
+   return input_dataset.clone();
 }
 
 pub fn fast_rpc(input_dataset: &Dataset, query: Query) -> Dataset {

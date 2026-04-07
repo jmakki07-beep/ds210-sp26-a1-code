@@ -12,7 +12,7 @@ impl ChatbotV1 {
     }
 
     #[allow(dead_code)]
-    pub async fn chat_with_user(&mut self, message: String) -> String {
+    pub async fn chat_with_user(&mut self, message: String) n -> String {
         let mut chat_session: Chat<Llama> = self.model
             .chat()
             .with_system_prompt("The assistant will act like a pirate");
@@ -21,6 +21,15 @@ impl ChatbotV1 {
             .await
             .unwrap();
 
+<<<<<<< HEAD
         return response.to_string();
+=======
+        let response = chat_session.add_message(message).await;
+
+        match response {
+            Ok(reply) => reply,
+            Err(_) => String::from("Sorry, something went wrong."),
+        }
+>>>>>>> partner/rpc-wang
     }
 }

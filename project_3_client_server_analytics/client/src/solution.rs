@@ -12,7 +12,6 @@ pub async fn run_slow_rpc(rpc_client: &RPCInterfaceClient, query: Query) -> Data
     
     let dataset = rpc_client.slow_rpc(Context::current()).await.unwrap();
     return compute_query_on_dataset(&dataset, &query)
-  
 }
 
 pub async fn run_fast_rpc(rpc_client: &RPCInterfaceClient, query: Query) -> Dataset {

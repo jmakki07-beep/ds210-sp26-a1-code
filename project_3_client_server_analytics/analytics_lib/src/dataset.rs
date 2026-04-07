@@ -1,5 +1,5 @@
-use std::fmt::{Debug, Display};
 use serde::{Deserialize, Serialize};
+use std::fmt::{Debug, Display};
 #[derive(Clone, PartialEq, Eq, Debug, Serialize, Deserialize)]
 pub enum ColumnType {
     String,

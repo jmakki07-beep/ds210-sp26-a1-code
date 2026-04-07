@@ -34,7 +34,6 @@ impl ChatbotV4 {
     }
 
 pub fn get_history(&self, username: String) -> Vec<String> {
-    println!("GET_HISTORY CALLED FOR {}", username);
     let filename = &format!("{}.txt", username);
 
     match file_library::load_chat_session_from_file(filename) {
